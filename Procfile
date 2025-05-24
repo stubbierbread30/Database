@@ -1,1 +1,1 @@
-web: gunicorn Database.wsgi
+web: python manage.py migrate && gunicorn Database.wsgi
