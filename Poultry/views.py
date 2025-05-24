@@ -8,7 +8,6 @@ from django.utils.dateparse import parse_date
 def Poultry(request):
   return render(request,"select.html")
 
-@csrf_exempt
 def password(request):
   return render(request,"password.html")
 
