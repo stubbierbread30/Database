@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poultry Inventory</title>
+  <link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+   <link rel="icon" href="{% static 'images/shikin.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="admin-section">
+      <div class="admin-name">Admin</div>
+      <ul class="nav-links">
+        <li><a href="{% url 'main' %}" class="sidebar-link {% if request.resolver_match.url_name == 'main' %}active{% endif %}"><i class="fas fa-th-large"></i> Dashboard</a></li>
+        <li><a href="{% url 'batchlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'batchlog' %}active{% endif %}"><i class="fas fa-database"></i> Batch Log</a></li>
+        <li><a href="{% url 'inventory' %}" class="sidebar-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}"><i class="fas fa-box"></i> Inventory</a></li>
+        <li><a href="{% url 'growthlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'growthlog' %}active{% endif %}"><i class="fas fa-chart-line"></i> Growth Log</a></li>
+      </ul>
+    </div>
+    <div class="logout-section">
+      <a href="{% url 'Poultry' %}"><i class="fas fa-sign-out-alt"></i> Log out</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h3>Medicine Inventory</h3>
+    <div class="table-container">
+      <table id="medicineTable">
+        <thead>
+          <tr>
+            <th>Medicine</th>
+            <th>Quantity</th>
+            <th>Expiry Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="medicine-no-results">No data found</div>
+      <button onclick="addMedicineRow()">Add</button>
+      <button onclick="deleteSelectedRow('medicineTable')">Delete</button>
+    </div>
+
+    <h3>Feeds Inventory</h3>
+    <div class="table-container">
+      <table id="feedsTable">
+        <thead>
+          <tr>
+            <th>Feeds</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="feeds-no-results">No data found</div>
+      <button onclick="addFeedRow()">Add</button>
+      <button onclick="deleteSelectedRow('feedsTable', 'feed')">Delete</button>
+    </div>
+  </div>
+
+  <script src="{% static 'js/inventory.js' %}"></script>
+  <script>
+    const initialFeeds = {{ feeds|safe }};
+    const initialMedicines = {{ medicines|safe }};
+  </script>
+</body>
+</html>

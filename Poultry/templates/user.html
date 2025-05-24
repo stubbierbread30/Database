@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poultry Inventory</title>
+  <link rel="stylesheet" href="{% static 'css/user.css' %}">
+  <link rel="icon" href="{% static 'images/shikin.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="main-content">
+
+    <!-- <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search">
+      <button id="searchButton"><i class="fas fa-search"></i></button>
+    </div> -->
+
+    <div class="table-container">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Batch ID</th>
+            <th>Batch Name</th>
+            <th>Health Status</th>
+            <th>Weeks</th>
+            <th>Quantity</th>
+            <th>Date Arrived</th>
+            <th>Date Harvest</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for batch in batches %}
+            <tr>
+              <td>{{ batch.batch_id }}</td>
+              <td>{{ batch.batch_name }}</td>
+              <td>
+                {% if batch.isHealthGood %}
+                  <span class="status-good">Good</span>
+                {% else %}
+                  <span class="status-bad">Bad</span>
+                {% endif %}
+              </td>
+              <td>{{ batch.batch_age }}</td>
+              <td>{{ batch.weight }}</td>
+              <td>{{ batch.Date_Arrived|date:"Y-m-d" }}</td>
+              <td>
+                {% if batch.Date_Released %}
+                  {{ batch.Date_Released|date:"Y-m-d" }}
+                {% else %}
+                  Not harvested
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7">No batches found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="{% static 'js/user.js' %}"></script>
+</body>
+</html>

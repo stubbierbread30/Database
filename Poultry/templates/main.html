@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poultry Inventory</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+   <link rel="icon" href="{% static 'images/shikin.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="admin-section">
+        <div class="admin-name">Admin</div>
+        <ul class="nav-links">
+          <li><a href="{% url 'main' %}" class="sidebar-link {% if request.resolver_match.url_name == 'main' %}active{% endif %}"><i class="fas fa-th-large icon-click"></i> Dashboard</a></li>
+          <li><a href="{% url 'batchlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'batchlog' %}active{% endif %}"><i class="fas fa-database icon-click"></i> Batch Log</a></li>
+          <li><a href="{% url 'inventory' %}" class="sidebar-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}"><i class="fas fa-box icon-click"></i> Inventory</a></li>
+          <li><a href="{% url 'growthlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'growthlog' %}active{% endif %}"><i class="fas fa-chart-line icon-click"></i> Growth Log</a></li>
+        </ul>
+      </div>
+      <div class="logout-section">
+        <a href="{% url 'Poultry' %}"><i class="fas fa-sign-out-alt icon-click"></i> Log out</a>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <!-- <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search">
+        <button id="searchButton"><i class="fas fa-search"></i></button>
+      </div> -->
+
+      <div class="table-container">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Batch ID</th>
+              <th>Batch Name</th>
+              <th>Health Status</th>
+              <th>Weeks</th>
+              <th>Quantity</th>
+              <th>Date Arrived</th>
+              <th>Date Harvest</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for batch in batches %}
+            <tr>
+              <td>{{ batch.batch_id }}</td>
+              <td>{{ batch.batch_name }}</td>
+              <td>
+                {% if batch.isHealthGood %}
+                  <span class="status-good">Good</span>
+                {% else %}
+                  <span class="status-bad">Bad</span>
+                {% endif %}
+              </td>
+              <td>{{ batch.batch_age }}</td>
+              <td>{{ batch.weight }}</td>
+              <td>{{ batch.Date_Arrived|date:"Y-m-d" }}</td>
+              <td>
+                {% if batch.Date_Released %}
+                  {{ batch.Date_Released|date:"Y-m-d" }}
+                {% else %}
+                  Not harvested
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7">No batches found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div id="no-results">Data not found</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

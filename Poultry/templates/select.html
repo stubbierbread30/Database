@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poultry Inventory</title>
+  <link rel="stylesheet" href="{% static 'css/select.css' %}">
+   <link rel="icon" href="{% static 'images/shikin.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <div class="container">
+    <a class="button" href="{% url 'user' %}">User</a>
+    <a class="button" href="{% url 'password' %}">Admin</a>
+</div>
+
+</body>
+</html>

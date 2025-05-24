@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poultry Inventory</title>
+  <link rel="stylesheet" href="{% static 'css/growthlog.css' %}">
+   <link rel="icon" href="{% static 'images/shikin.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="admin-section">
+      <div class="admin-name">Admin</div>
+      <ul class="nav-links">
+        <li><a href="{% url 'main' %}" class="sidebar-link {% if request.resolver_match.url_name == 'main' %}active{% endif %}"><i class="fas fa-th-large"></i> Dashboard</a></li>
+        <li><a href="{% url 'batchlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'batchlog' %}active{% endif %}"><i class="fas fa-database"></i> Batch Log</a></li>
+        <li><a href="{% url 'inventory' %}" class="sidebar-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}"><i class="fas fa-box"></i> Inventory</a></li>
+        <li><a href="{% url 'growthlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'growthlog' %}active{% endif %}"><i class="fas fa-chart-line"></i> Growth Log</a></li>
+      </ul>
+    </div>
+    <div class="logout-section">
+      <a href="{% url 'Poultry' %}"><i class="fas fa-sign-out-alt"></i> Log out</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="table-container">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Batch</th>
+            <th>Health Status</th>
+            <th>Weight (kg)</th>
+            <th>Feed</th>
+            <th>Medicine</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in growthlogs %}
+          <tr data-log-id="{{ log.log_id }}">
+            <td>{{ log.batch.batch_name }}</td>
+            <td>
+              {% if log.isHealthGood %}
+                "Good" 
+              {% else %}
+                "Bad"
+              {% endif %}
+            </td>
+            <td>{{ log.weight }}</td>
+            <td>
+              {% if log.feed %}
+                {{ log.feed.feed_type }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td>
+              {% if log.medicine %}
+                {{ log.medicine.medicine_name }}
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td>{{ log.log_date }}</td>
+            <td>
+              <button onclick="editRow(this)">Edit</button>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">No growth log entries found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div id="no-results">No data found</div>
+      <br>
+      <button onclick="deleteSelectedRow()">Delete</button>
+    </div>
+  </div>
+
+  <button class="add-btn" onclick="handleAction('add')"><i class="fas fa-plus"></i></button>
+
+  <script>
+    window.batches = {{ batches|safe }};
+    window.feeds = {{ feeds|safe }};
+    window.medicines = {{ medicines|safe }};
+    function getCSRFToken() {
+      return document.cookie.split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        .split('=')[1];
+    }
+  </script>
+  <script src="{% static 'js/growthlog.js' %}"></script>
+</body>
+</html>

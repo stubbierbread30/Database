@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poultry Inventory</title>
+  <link rel="stylesheet" href="{% static 'css/batchlog.css' %}">
+  <link rel="icon" href="{% static 'images/shikin.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="admin-section">
+      <div class="admin-name">Admin</div>
+      <ul class="nav-links">
+        <li><a href="{% url 'main' %}" class="sidebar-link {% if request.resolver_match.url_name == 'main' %}active{% endif %}"><i class="fas fa-th-large"></i> Dashboard</a></li>
+        <li><a href="{% url 'batchlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'batchlog' %}active{% endif %}"><i class="fas fa-database"></i> Batch Log</a></li>
+        <li><a href="{% url 'inventory' %}" class="sidebar-link {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}"><i class="fas fa-box"></i> Inventory</a></li>
+        <li><a href="{% url 'growthlog' %}" class="sidebar-link {% if request.resolver_match.url_name == 'growthlog' %}active{% endif %}"><i class="fas fa-chart-line"></i> Growth Log</a></li>
+      </ul>
+    </div>
+    <div class="logout-section">
+      <a href="{% url 'Poultry' %}"><i class="fas fa-sign-out-alt"></i> Log out</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="table-container">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Batch ID</th>
+            <th>Batch Name</th>
+            <th>Week/s</th>
+            <th>Weight</th>
+            <th>Health Status</th>
+            <th>Date Arrived</th>
+            <th>Date Released</th>
+            <th>Breed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for batch in batches %}
+          <tr>
+            <td>{{ batch.batch_id }}</td>
+            <td>{{ batch.batch_name }}</td>
+            <td>{{ batch.batch_age }}</td>
+            <td>{{ batch.weight }}</td>
+            <td>{{ batch.isHealthGood|yesno:"Healthy,Sick" }}</td>
+            <td>{{ batch.Date_Arrived }}</td>
+            <td>{{ batch.Date_Released|default:"N/A" }}</td>
+            <td>{{ batch.breed.breed_name }}</td>
+          </tr>
+          {% empty %}
+            <tr><td colspan="8">No batches available</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div id="no-results">No data found</div>
+    </div>
+  </div>
+
+  <button class="add-btn" onclick="handleAction('add')"><i class="fas fa-plus"></i></button>
+
+  <!-- <div class="action-menu" id="actionMenu">
+    <button onclick="handleAction('add')">Add</button>
+    <button onclick="handleAction('update')">Update</button>
+    <button onclick="handleAction('delete')">Delete</button>
+  </div> -->
+
+  <script>
+    const breeds = JSON.parse('{{ breeds|safe|escapejs }}');
+  </script>
+  <script src="{% static 'js/batchlog.js' %}"></script>
+</body>
+</html>
